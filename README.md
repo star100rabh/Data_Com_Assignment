@@ -42,6 +42,7 @@ DataCom/
 ├── README.md
 ├── requirements.txt
 ├── data_generator.py      # Bitstream generation & zero-run injection
+├── palindrome.py          # O(N) Manacher's palindrome detection
 └── ...
 ```
 
@@ -49,4 +50,5 @@ DataCom/
 
 ## 📌 Implementation Log
 - Implemented bitstream generator and zero-run sequence injection module.
-# Data_Com_Assignment
+- Implemented Manacher's Algorithm for optimal O(N) longest palindromic sequence detection.
+
