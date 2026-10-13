@@ -43,6 +43,8 @@ DataCom/
 ├── requirements.txt
 ├── data_generator.py      # Bitstream generation & zero-run injection
 ├── palindrome.py          # O(N) Manacher's palindrome detection
+├── line_coding.py         # Digital line coding encoders (NRZ-L, NRZ-I, etc.)
+├── plotter.py             # Signal waveform visualizer
 └── ...
 ```
 
@@ -51,4 +53,6 @@ DataCom/
 ## 📌 Implementation Log
 - Implemented bitstream generator and zero-run sequence injection module.
 - Implemented Manacher's Algorithm for optimal O(N) longest palindromic sequence detection.
+- Implemented NRZ-L and NRZ-I line coding encoders with waveform plotting utility.
+
 
