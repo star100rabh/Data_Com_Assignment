@@ -54,5 +54,7 @@ DataCom/
 - Implemented bitstream generator and zero-run sequence injection module.
 - Implemented Manacher's Algorithm for optimal O(N) longest palindromic sequence detection.
 - Implemented NRZ-L and NRZ-I line coding encoders with waveform plotting utility.
+- Added Manchester (IEEE 802.3), Differential Manchester, and AMI (Alternate Mark Inversion) line coding encoders.
+
 
 
