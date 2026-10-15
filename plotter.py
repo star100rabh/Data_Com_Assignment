@@ -9,7 +9,7 @@ import numpy as np
 
 
 def plot_line_code(bitstream: str, time: np.ndarray, voltage: np.ndarray, 
-                   scheme_name: str, save_path: str = None, show: bool = False):
+                   scheme_name: str, labels: list = None, save_path: str = None, show: bool = False):
     """
     Plots the digital waveform for a given line coding scheme.
 
@@ -18,10 +18,12 @@ def plot_line_code(bitstream: str, time: np.ndarray, voltage: np.ndarray,
         time (np.ndarray): Time axis points.
         voltage (np.ndarray): Corresponding voltage levels.
         scheme_name (str): Name of the line coding scheme (e.g. 'NRZ-L').
+        labels (list, optional): Custom annotations for each bit interval (e.g. ['0', 'V', 'B']).
         save_path (str, optional): File path to save the plot image.
         show (bool): Whether to call plt.show() interactively.
     """
     num_bits = len(bitstream)
+    display_labels = labels if labels is not None and len(labels) == num_bits else list(bitstream)
     
     fig, ax = plt.subplots(figsize=(max(10, num_bits * 0.8), 4))
     
@@ -32,12 +34,22 @@ def plot_line_code(bitstream: str, time: np.ndarray, voltage: np.ndarray,
     ax.axhline(0, color="gray", linestyle="--", linewidth=0.8, alpha=0.7)
     
     # Draw vertical grid lines at each bit boundary and annotate bits
-    for i, bit in enumerate(bitstream):
+    for i, lbl in enumerate(display_labels):
         ax.axvline(i, color="lightgray", linestyle=":", linewidth=1)
-        # Display the bit value in the center of the bit duration
-        ax.text(i + 0.5, 1.4, bit, fontsize=12, fontweight="bold", 
+        # Highlight violations (V) or balancing pulses (B) with distinct colors
+        box_bg = "#eef5ff"
+        box_border = "#99ccff"
+        if "V" in str(lbl):
+            box_bg = "#ffebee"
+            box_border = "#ef5350"
+        elif "B" in str(lbl):
+            box_bg = "#e8f5e9"
+            box_border = "#66bb6a"
+
+        # Display the bit / symbol in the center of the bit duration
+        ax.text(i + 0.5, 1.4, str(lbl), fontsize=11, fontweight="bold", 
                 ha="center", va="center", color="#333333",
-                bbox=dict(boxstyle="circle,pad=0.2", facecolor="#eef5ff", edgecolor="#99ccff"))
+                bbox=dict(boxstyle="circle,pad=0.2", facecolor=box_bg, edgecolor=box_border))
 
     # Final boundary line
     ax.axvline(num_bits, color="lightgray", linestyle=":", linewidth=1)

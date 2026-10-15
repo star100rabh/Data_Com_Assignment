@@ -44,6 +44,7 @@ DataCom/
 ├── data_generator.py      # Bitstream generation & zero-run injection
 ├── palindrome.py          # O(N) Manacher's palindrome detection
 ├── line_coding.py         # Digital line coding encoders (NRZ-L, NRZ-I, etc.)
+├── scrambling.py          # AMI Scrambling schemes (B8ZS, HDB3)
 ├── plotter.py             # Signal waveform visualizer
 └── ...
 ```
@@ -55,6 +56,8 @@ DataCom/
 - Implemented Manacher's Algorithm for optimal O(N) longest palindromic sequence detection.
 - Implemented NRZ-L and NRZ-I line coding encoders with waveform plotting utility.
 - Added Manchester (IEEE 802.3), Differential Manchester, and AMI (Alternate Mark Inversion) line coding encoders.
+- Implemented B8ZS and HDB3 scrambling schemes for AMI with O(N) zero-run sequence analysis.
+
 
 
 
