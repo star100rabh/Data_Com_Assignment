@@ -78,6 +78,43 @@ def plot_line_code(bitstream: str, time: np.ndarray, voltage: np.ndarray,
     plt.close(fig)
 
 
+def plot_analog_and_staircase(t_analog: np.ndarray, signal_analog: np.ndarray, 
+                              t_samples: np.ndarray, sample_values: np.ndarray, 
+                              reconstructed_staircase: np.ndarray, 
+                              title: str = "Modulation & Staircase Reconstruction", 
+                              save_path: str = None, show: bool = False):
+    """
+    Plots the continuous analog signal along with discrete samples and the reconstructed
+    staircase waveform produced by the decoder.
+    """
+    fig, ax = plt.subplots(figsize=(10, 4.5))
+    
+    # 1. Continuous analog signal
+    ax.plot(t_analog, signal_analog, color="#1f77b4", linewidth=2.0, label="Original Analog Signal", alpha=0.85)
+    
+    # 2. Discrete samples
+    ax.scatter(t_samples, sample_values, color="#d62728", s=35, zorder=5, label="Sampled Points")
+    
+    # 3. Staircase reconstructed signal
+    ax.step(t_samples, reconstructed_staircase, where="post", color="#ff7f0e", 
+            linewidth=2.2, label="Reconstructed Staircase Signal")
+    
+    ax.axhline(0, color="gray", linestyle="--", linewidth=0.8, alpha=0.6)
+    ax.set_xlabel("Time (seconds)", fontsize=11, fontweight="bold")
+    ax.set_ylabel("Amplitude (Volts)", fontsize=11, fontweight="bold")
+    ax.set_title(title, fontsize=13, fontweight="bold", pad=15)
+    ax.grid(True, linestyle="--", alpha=0.5)
+    ax.legend(loc="upper right", framealpha=0.9)
+    
+    plt.tight_layout()
+    if save_path:
+        plt.savefig(save_path, dpi=150)
+        print(f"[Plot saved to: {save_path}]")
+    if show:
+        plt.show()
+    plt.close(fig)
+
+
 # ^^^^^^^^ Test ke liye likha hai maine (START) ^^^^^^^^
 # (Yeh section sirf is file ko akele chala kar check karne ke liye hai, main project logic upar hai)
 if __name__ == "__main__":

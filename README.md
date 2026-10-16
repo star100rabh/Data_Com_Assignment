@@ -45,7 +45,8 @@ DataCom/
 ├── palindrome.py          # O(N) Manacher's palindrome detection
 ├── line_coding.py         # Digital line coding encoders (NRZ-L, NRZ-I, etc.)
 ├── scrambling.py          # AMI Scrambling schemes (B8ZS, HDB3)
-├── plotter.py             # Signal waveform visualizer
+├── modulation.py          # PCM and Delta Modulation encoders/decoders
+├── plotter.py             # Signal waveform & staircase visualizer
 └── ...
 ```
 
@@ -57,6 +58,8 @@ DataCom/
 - Implemented NRZ-L and NRZ-I line coding encoders with waveform plotting utility.
 - Added Manchester (IEEE 802.3), Differential Manchester, and AMI (Alternate Mark Inversion) line coding encoders.
 - Implemented B8ZS and HDB3 scrambling schemes for AMI with O(N) zero-run sequence analysis.
+- Implemented Pulse Code Modulation (PCM) and Delta Modulation (DM) with staircase signal reconstruction.
+
 
 
 
