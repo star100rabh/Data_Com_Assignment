@@ -46,6 +46,7 @@ DataCom/
 ├── line_coding.py         # Digital line coding encoders (NRZ-L, NRZ-I, etc.)
 ├── scrambling.py          # AMI Scrambling schemes (B8ZS, HDB3)
 ├── modulation.py          # PCM and Delta Modulation encoders/decoders
+├── decoder.py             # Waveform parameter-based decoders & descramblers
 ├── plotter.py             # Signal waveform & staircase visualizer
 └── ...
 ```
@@ -59,6 +60,7 @@ DataCom/
 - Added Manchester (IEEE 802.3), Differential Manchester, and AMI (Alternate Mark Inversion) line coding encoders.
 - Implemented B8ZS and HDB3 scrambling schemes for AMI with O(N) zero-run sequence analysis.
 - Implemented Pulse Code Modulation (PCM) and Delta Modulation (DM) with staircase signal reconstruction.
+- Implemented waveform parameter-based line coding decoders (NRZ-L, NRZ-I, Manchester, Differential Manchester, AMI) and AMI descramblers (B8ZS, HDB3).
 
 
 
