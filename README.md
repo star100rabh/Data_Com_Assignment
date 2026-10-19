@@ -48,7 +48,9 @@ DataCom/
 ├── modulation.py          # PCM and Delta Modulation encoders/decoders
 ├── decoder.py             # Waveform parameter-based decoders & descramblers
 ├── plotter.py             # Signal waveform & staircase visualizer
-└── ...
+├── gui.py                 # Interactive Tkinter desktop graphical visualizer
+├── main.py                # Main interactive CLI pipeline matching assignment flow
+└── SPECIFICATION_REPORT.md# 1-Page specification report for Gradescope submission
 ```
 
 ---
@@ -61,6 +63,8 @@ DataCom/
 - Implemented B8ZS and HDB3 scrambling schemes for AMI with O(N) zero-run sequence analysis.
 - Implemented Pulse Code Modulation (PCM) and Delta Modulation (DM) with staircase signal reconstruction.
 - Implemented waveform parameter-based line coding decoders (NRZ-L, NRZ-I, Manchester, Differential Manchester, AMI) and AMI descramblers (B8ZS, HDB3).
+- Built interactive CLI pipeline (`main.py`) matching exact assignment prompt sequence and Tkinter GUI (`gui.py`).
+- Prepared complete 1-page specification report (`SPECIFICATION_REPORT.md`) for Gradescope.
 
 
 
