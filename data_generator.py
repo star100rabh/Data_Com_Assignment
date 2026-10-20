@@ -33,28 +33,30 @@ def inject_subsequence(base_sequence: str, subseq: str, start_index: int) -> str
 def generate_bits_with_zero_runs(length: int = 32, run_type: str = "both") -> str:
     """
     Generates a bit sequence containing runs of consecutive zeros.
-    - 'four': inserts 4 consecutive zeros (for HDB3)
-    - 'eight': inserts 8 consecutive zeros (for B8ZS)
+    - 'four' / '4_zeros': inserts 4 consecutive zeros (for HDB3)
+    - 'eight' / '8_zeros': inserts 8 consecutive zeros (for B8ZS)
     - 'both': inserts both patterns
     """
-    if run_type == "eight" and length < 10:
+    normalized = str(run_type).lower().replace(" ", "").replace("_", "")
+
+    if normalized in ("eight", "8", "8zeros", "eightzeros", "b8zs") and length < 10:
         length = 10
-    elif run_type == "both" and length < 20:
+    elif normalized in ("both", "bothzeros", "all") and length < 20:
         length = 20
-    elif run_type == "four" and length < 6:
+    elif normalized in ("four", "4", "4zeros", "fourzeros", "hdb3") and length < 6:
         length = 6
 
     bits = list(generate_random_bits(length))
 
-    if run_type == "four":
+    if normalized in ("four", "4", "4zeros", "fourzeros", "hdb3"):
         idx = random.randint(1, length - 5)
         bits[idx:idx + 4] = list("0000")
 
-    elif run_type == "eight":
+    elif normalized in ("eight", "8", "8zeros", "eightzeros", "b8zs"):
         idx = random.randint(1, length - 9)
         bits[idx:idx + 8] = list("00000000")
 
-    elif run_type == "both":
+    elif normalized in ("both", "bothzeros", "all"):
         idx1 = random.randint(1, max(1, (length // 2) - 8))
         bits[idx1:idx1 + 8] = list("00000000")
 
@@ -63,6 +65,28 @@ def generate_bits_with_zero_runs(length: int = 32, run_type: str = "both") -> st
         bits[idx2:idx2 + 4] = list("0000")
 
     return "".join(bits)
+
+
+def generate_and_find_palindrome(length: int = 24, run_type: str = None) -> tuple:
+    """
+    Generates a digital bitstream and computes its longest palindromic sequence,
+    fulfilling the direct PDF objective:
+    'Digital data generator: generates completely random data sequence and a
+    random sequence with some fixed sub-sequences like eight or four consecutive
+    zeros. It should also return the longest palindromic sequence in the generated data.'
+    
+    Returns:
+        tuple: (bitstream, palindrome_info_dict)
+    """
+    from palindrome import find_longest_palindrome_info
+
+    if run_type:
+        bitstream = generate_bits_with_zero_runs(length, run_type)
+    else:
+        bitstream = generate_random_bits(length)
+
+    pal_info = find_longest_palindrome_info(bitstream)
+    return bitstream, pal_info
 
 
 def format_bitstream(bits: str, group_size: int = 4) -> str:
@@ -94,4 +118,9 @@ if __name__ == "__main__":
     # 4. Sequence with both 4 and 8 zero patterns
     seq_both = generate_bits_with_zero_runs(length=32, run_type="both")
     print("\nSequence with both   :", seq_both)
+
+    # 5. Combined generator + longest palindromic sequence check
+    stream, pal = generate_and_find_palindrome(length=24, run_type="4_zeros")
+    print("\nGenerated stream     :", stream)
+    print("Longest Palindrome   :", pal["palindrome"], f"(Length: {pal['length']}, Start: {pal['start_index']})")
 # ^^^^^^^^ Test ke liye likha hai maine (END) ^^^^^^^^

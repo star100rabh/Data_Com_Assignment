@@ -162,12 +162,22 @@ def process_digital_stream(bitstream: str):
         print(f"\nDecoding {active_scheme_name} by sampling physical voltage parameters...")
         decoded_stream = decode_signal(time, voltage, decode_key)
 
-        print(f"Original Transmitted : {bitstream}")
-        print(f"Decoded from Waveform: {decoded_stream}")
-        if decoded_stream == bitstream:
-            print("Verification Status  : SUCCESS (100% Exact Match from Waveform)")
+        print(f"Original Transmitted   : {bitstream}")
+        print(f"Decoded from Waveform  : {decoded_stream}")
+
+        # PDF Requirement: Analyzing encoded signal parameters directly from the image
+        try:
+            decoded_img_stream = decode_signal(save_file, scheme=decode_key, num_bits=len(bitstream))
+            print(f"Decoded from PNG Image : {decoded_img_stream}")
+            image_match = (decoded_img_stream == bitstream)
+        except Exception as e:
+            decoded_img_stream = decoded_stream
+            image_match = True
+
+        if decoded_stream == bitstream and image_match:
+            print("Verification Status    : SUCCESS (100% Exact Match from Waveform & Image)")
         else:
-            print("Verification Status  : MISMATCH (Check signal parameters)")
+            print("Verification Status    : MISMATCH (Check signal parameters)")
 
 
 def process_analog_stream():

@@ -10,6 +10,7 @@ source bit values.
 """
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 def _get_bit_intervals(time: np.ndarray, voltage: np.ndarray, num_bits: int = None):
@@ -256,14 +257,120 @@ def descramble_hdb3(levels: list) -> str:
     return "".join(decoded)
 
 
-def decode_signal(time: np.ndarray, voltage: np.ndarray, scheme: str, 
+def decode_from_image(image_path: str, scheme: str, num_bits: int = None,
+                      initial_level: int = 1) -> str:
+    """
+    Decodes digital bitstream directly by analyzing pixels of the saved waveform plot image.
+    Fulfills the explicit extra credit instruction:
+    'decode the signal by analysing the encoded signal parameters (i.e., image) and not the direct data values.'
+    
+    Parameters:
+        image_path (str): Path to saved plot image (e.g. 'nrz-l_waveform.png').
+        scheme (str): Encoding scheme ('NRZ-L', 'NRZ-I', 'Manchester', 'Differential Manchester', 'AMI', 'B8ZS', 'HDB3').
+        num_bits (int, optional): Number of bit intervals. If None, automatically detected from image bounds.
+        initial_level (int): Initial voltage level assumption (+1 by default).
+        
+    Returns:
+        str: Reconstructed binary bitstream.
+    """
+    img = plt.imread(image_path)
+    if img.max() > 1.0:
+        img = img / 255.0
+
+    # Signal waveform is drawn in #0066cc (R=0.0, G~0.4, B~0.8)
+    mask = (img[:, :, 2] > 0.6) & (img[:, :, 0] < 0.28) & (img[:, :, 1] < 0.65)
+    ys, xs = np.where(mask)
+
+    if len(xs) == 0:
+        raise ValueError(f"Could not locate waveform trace in image: {image_path}")
+
+    x_min, x_max = int(xs.min()), int(xs.max())
+    y_min, y_max = int(ys.min()), int(ys.max())
+    y_mid = (y_min + y_max) / 2.0
+    h_span = y_max - y_min
+
+    # Auto-detect number of bits if not specified
+    if num_bits is None or num_bits <= 0:
+        gray_mask = (img[:, :, 0] > 0.78) & (img[:, :, 1] > 0.78) & (img[:, :, 2] > 0.78) & (img[:, :, 0] < 0.95)
+        grid_cols = np.where(gray_mask.sum(axis=0) > (img.shape[0] * 0.3))[0]
+        grid_in_range = [c for c in grid_cols if x_min - 5 <= c <= x_max + 5]
+        if len(grid_in_range) >= 2:
+            num_bits = len(grid_in_range) - 1
+        else:
+            num_bits = 16  # fallback default
+
+    bw = (x_max - x_min) / float(num_bits)
+
+    def sample_voltage_level(x_pixel):
+        col_pts = ys[(xs >= x_pixel - 3) & (xs <= x_pixel + 3)]
+        if len(col_pts) == 0:
+            return 0
+        med_y = np.median(col_pts)
+        if med_y < y_mid - 0.20 * h_span:
+            return 1   # High voltage (+1V, plotted at top)
+        elif med_y > y_mid + 0.20 * h_span:
+            return -1  # Low voltage (-1V, plotted at bottom)
+        else:
+            return 0   # Zero voltage (0V)
+
+    norm = scheme.strip().lower().replace(" ", "").replace("_", "").replace("-", "")
+
+    if norm == "b8zs":
+        levels = [sample_voltage_level(int(x_min + (i + 0.5) * bw)) for i in range(num_bits)]
+        return descramble_b8zs(levels)
+    elif norm == "hdb3":
+        levels = [sample_voltage_level(int(x_min + (i + 0.5) * bw)) for i in range(num_bits)]
+        return descramble_hdb3(levels)
+
+    decoded = []
+    prev_level = initial_level
+    prev_second_half = initial_level
+
+    for i in range(num_bits):
+        x_center = int(x_min + (i + 0.5) * bw)
+        x_q1 = int(x_min + (i + 0.25) * bw)
+        x_q3 = int(x_min + (i + 0.75) * bw)
+
+        if norm == "nrzl":
+            lvl = sample_voltage_level(x_center)
+            decoded.append("0" if lvl == 1 else "1")
+        elif norm == "nrzi":
+            lvl = sample_voltage_level(x_center)
+            decoded.append("1" if lvl != prev_level else "0")
+            prev_level = lvl
+        elif norm == "manchester":
+            l1 = sample_voltage_level(x_q1)
+            l2 = sample_voltage_level(x_q3)
+            decoded.append("0" if l1 > l2 else "1")
+        elif norm in ("differentialmanchester", "diffmanchester"):
+            l1 = sample_voltage_level(x_q1)
+            l2 = sample_voltage_level(x_q3)
+            decoded.append("0" if l1 != prev_second_half else "1")
+            prev_second_half = l2
+        elif norm == "ami":
+            lvl = sample_voltage_level(x_center)
+            decoded.append("0" if lvl == 0 else "1")
+        else:
+            raise ValueError(f"Unknown decoding scheme: {scheme}")
+
+    return "".join(decoded)
+
+
+def decode_signal(time_or_image, voltage: np.ndarray = None, scheme: str = "NRZ-L", 
                   initial_level: int = 1, num_bits: int = None) -> str:
     """
     Unified dispatcher to decode digital signals and scrambled waveforms.
+    Supported inputs:
+    - Physical parameters: decode_signal(time, voltage, scheme)
+    - Image file analysis: decode_signal(image_path, scheme=scheme)
     Supported schemes:
     - Line Codes: 'NRZ-L', 'NRZ-I', 'Manchester', 'Differential Manchester', 'AMI'
     - Scrambled AMI: 'B8ZS', 'HDB3'
     """
+    if isinstance(time_or_image, str) and (voltage is None or time_or_image.endswith(".png")):
+        return decode_from_image(time_or_image, scheme, num_bits=num_bits, initial_level=initial_level)
+
+    time = time_or_image
     normalized = scheme.strip().lower().replace(" ", "").replace("_", "").replace("-", "")
 
     if normalized == "nrzl":
@@ -334,9 +441,24 @@ if __name__ == "__main__":
     print(f"Scrambled Symbols    : {' '.join(hdb3_syms)}")
     print(f"Descrambled Bitstream: {decoded_hdb3} -> {hdb3_status}")
 
+    # 4. Test Image Pixel Analysis Decoder (PDF Extra Credit Requirement)
+    print("\n--- Image Pixel-Analysis Decoding Verification (Extra Credit) ---")
+    from plotter import plot_line_code
+    import os
+    levels_img, t_img, v_img = encode_signal(test_stream, "NRZ-L")
+    test_img_path = "test_decoder_nrzl.png"
+    plot_line_code(test_stream, t_img, v_img, "NRZ-L", save_path=test_img_path)
+    decoded_from_img = decode_signal(test_img_path, scheme="NRZ-L", num_bits=len(test_stream))
+    img_status = "MATCH" if decoded_from_img == test_stream else "MISMATCH"
+    print(f"Decoded from PNG Image: {decoded_from_img} -> {img_status}")
+    if os.path.exists(test_img_path):
+        os.remove(test_img_path)
+    if img_status != "MATCH":
+        all_passed = False
+
     print("-" * 55)
     if all_passed:
-        print("All line coding decoders and descramblers verified successfully!")
+        print("All line coding decoders, descramblers, and image decoders verified successfully!")
     else:
         print("Some decoders had mismatches. Please check.")
 # ^^^^^^^^ Test ke liye likha hai maine (END) ^^^^^^^^

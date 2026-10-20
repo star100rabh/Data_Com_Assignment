@@ -1,6 +1,7 @@
 # ITT 036 — Programming Assignment 1: Specification Report
 **Project Title:** Digital Signal Encoder, Scrambler & Decoder Implementation  
 **Course:** ITT 036 (Autumn 2026) | **Date:** 21 October 2026  
+**Contributors:** Saurabh Patel, Mohit Moriya, Hemendra Kumar  
 **Deliverable:** 1-Page Specification Report for Gradescope Submission  
 
 ---
@@ -16,16 +17,17 @@
 
 ## 2. System Architecture & Component Mapping
 ```text
-DataCom/
+Data_Com_Assignment/
 ├── data_generator.py      # Random bitstream & 4-zero (HDB3) / 8-zero (B8ZS) sequence injection
 ├── palindrome.py          # O(N) Manacher's Algorithm for Longest Palindromic Sequence
 ├── line_coding.py         # Encoders for NRZ-L, NRZ-I, Manchester, Diff Manchester, AMI
 ├── scrambling.py          # B8ZS & HDB3 scrambling with O(N) zero-run sequence detection
 ├── modulation.py          # PCM (quantization/encoding) & Delta Modulation (DM) with staircase
-├── decoder.py             # Extra Credit: Physical waveform parameter-based decoders & descramblers
+├── decoder.py             # Extra Credit: Parameter-based & direct Image-pixel analysis decoders
 ├── plotter.py             # Signal visualizer (waveforms, staircase, and violation highlights)
 ├── gui.py                 # Extra Credit: Interactive graphical desktop visualizer (Tkinter + Matplotlib)
-└── main.py                # Unified interactive CLI pipeline matching PDF decision flow
+├── main.py                # Unified interactive CLI pipeline matching PDF decision flow
+└── test_suite.py          # Comprehensive automated verification test suite
 ```
 
 ---
@@ -36,7 +38,9 @@ DataCom/
 3. **Initial Reference States:**
    - **NRZ-I & Differential Manchester:** Assume an initial pre-transmission voltage level of $+1\text{ V}$.
    - **AMI:** Alternating polarity tracking begins with negative polarity so the first data `'1'` produces $+1\text{ V}$.
-4. **Physical Waveform Decoding (Extra Credit):** Receivers analyze voltage thresholds ($V > 0 \implies '0'$, $V < 0 \implies '1'$ for NRZ-L) and transition derivatives across boundaries (Manchester and NRZ-I) strictly from physical $(t, v)$ samples, without reading data bit memory.
+4. **Physical Waveform & Image-based Decoding (Extra Credit):**
+   - Receivers analyze voltage thresholds ($V > 0 \implies '0'$, $V < 0 \implies '1'$ for NRZ-L) and transition derivatives across boundaries strictly from physical $(t, v)$ samples.
+   - Direct image decoding (`decode_from_image`) analyzes saved PNG waveform plots by detecting the blue curve pixels, bounding box, and voltage transitions per bit interval, directly satisfying the requirement: *"decode the signal by analysing the encoded signal parameters (i.e., image) and not the direct data values."*
 5. **B8ZS & HDB3 Descrambling:** Receivers inspect AMI violation polarity ($V$, where current pulse matches previous pulse polarity) to reverse substitutions back to pure `'0'`s.
 
 ---
@@ -58,7 +62,10 @@ python main.py
 # 3. Launch the graphical user interface (Extra Credit visualizer)
 python main.py --gui   # or: python gui.py
 
-# 4. Run standalone test checks for any module
+# 4. Run automated test suite
+python test_suite.py
+
+# 5. Run standalone test checks for any module
 python data_generator.py | python palindrome.py | python line_coding.py
 python scrambling.py     | python modulation.py  | python decoder.py
 ```
