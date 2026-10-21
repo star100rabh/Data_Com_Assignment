@@ -9,7 +9,7 @@
 **Assignment:** Programming Assignment 1 — Digital Signal Encoder, Scrambler & Decoder Pipeline  
 **Due Date:** 21 October 2026  
 **Contributors:**
-- **Saurabh Patel**
+- **Saurabh Patel E**
 - **Mohit Moriya**
 - **Hemendra Kumar**
 
@@ -133,7 +133,6 @@ File: [`gui.py`](gui.py)
 Data_Com_Assignment/
 ├── README.md               # Complete project documentation & results log
 ├── requirements.txt        # Dependencies: numpy, matplotlib
-├── SPECIFICATION_REPORT.md # 1-Page specification report for Gradescope
 ├── data_generator.py       # Random bitstream & zero-run sequence generator
 ├── palindrome.py           # O(N) Manacher's palindrome detection algorithm
 ├── line_coding.py          # 5 Standard digital line coding encoders
@@ -338,11 +337,10 @@ Project satisfies all requirements of ITT 036 Programming Assignment 1.
 
 As specified in Page 2 of the assignment:
 - [x] Complete Python source code adhering to assignment constraints (no MATLAB/Octave).
-- [x] [`SPECIFICATION_REPORT.md`](SPECIFICATION_REPORT.md): 1-Page specification report covering languages, libraries, assumptions, execution guide, and academic references.
 - [x] All competitive coding components implemented in optimal linear time $O(N)$ without nested `if/else` ladders.
 - [x] Extra credit component: Signal decoding from waveform parameters and saved plot images.
 - [x] Extra credit component: Interactive desktop graphical user interface (`gui.py`).
-- [x] Both code repository and 1-page report prepared for separate submission to Gradescope.
+- [x] Automated test suite verifying 100% of pipeline requirements.
 
 ---
 
