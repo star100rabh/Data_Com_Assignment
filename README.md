@@ -51,7 +51,7 @@ The pipeline spans the entire digital signaling flow:
 ## 🚀 Key Features & Implemented Modules
 
 ### 1. Digital Data Generator & Zero Injection
-File: [`data_generator.py`](file:///Users/hemendrakumar/Desktop/data_come/Data_Com_Assignment/data_generator.py)
+File: [`data_generator.py`](data_generator.py)
 - **`generate_random_bits(length)`**: Generates purely random binary streams of arbitrary length.
 - **`generate_bits_with_zero_runs(length, run_type)`**: Injects specific zero-run patterns without overlapping:
   - `run_type="4_zeros"` / `"four"`: Injects 4 consecutive zeros (`0000`) required for HDB3 scrambling.
@@ -61,7 +61,7 @@ File: [`data_generator.py`](file:///Users/hemendrakumar/Desktop/data_come/Data_C
 - **`format_bitstream(bits)`**: Formats raw streams into 4-bit nibbles (e.g. `1011 0010`) for human readability.
 
 ### 2. Competitive Coding: Manacher's Algorithm $O(N)$
-File: [`palindrome.py`](file:///Users/hemendrakumar/Desktop/data_come/Data_Com_Assignment/palindrome.py)
+File: [`palindrome.py`](palindrome.py)
 - **Problem Requirement:** Identify the longest palindromic sequence in the bitstream. Brute-force ($O(N^3)$) or massive `if/else` ladders receive zero credit.
 - **Optimal Implementation:** Implemented using **Manacher's Algorithm** with linear time complexity $O(N)$:
   - Intersperses delimiter characters (`#`) so odd and even palindromes are handled identically.
@@ -71,7 +71,7 @@ File: [`palindrome.py`](file:///Users/hemendrakumar/Desktop/data_come/Data_Com_A
 - **Space Complexity:** $\mathcal{O}(N)$ auxiliary space.
 
 ### 3. Digital Line Coding Schemes
-File: [`line_coding.py`](file:///Users/hemendrakumar/Desktop/data_come/Data_Com_Assignment/line_coding.py)  
+File: [`line_coding.py`](line_coding.py)  
 Implements all 5 standard line coding techniques with normalized voltage levels ($+1\text{ V}, -1\text{ V}, 0\text{ V}$):
 
 | Scheme | Bit `0` Rule | Bit `1` Rule | Mid-Bit Transition? | DC Component |
@@ -83,7 +83,7 @@ Implements all 5 standard line coding techniques with normalized voltage levels 
 | **AMI** | Zero voltage ($0\text{ V}$) | Alternating positive ($+1\text{ V}$) & negative ($-1\text{ V}$) | No | Zero (DC Balanced) |
 
 ### 4. AMI Scrambling Schemes & Zero-Run $O(N)$
-File: [`scrambling.py`](file:///Users/hemendrakumar/Desktop/data_come/Data_Com_Assignment/scrambling.py)
+File: [`scrambling.py`](scrambling.py)
 - **`find_longest_zero_run(bitstream)`**: Competitive coding component finding the longest contiguous run of zeros in $O(N)$ single-pass linear time with $O(1)$ auxiliary space.
 - **B8ZS (Bipolar with 8-Zero Substitution)**:
   - Detects `00000000` and replaces it with `000VB0VB`.
@@ -95,7 +95,7 @@ File: [`scrambling.py`](file:///Users/hemendrakumar/Desktop/data_come/Data_Com_A
     - **Even Pulses:** Substitutes `B00V` ($B$ inverts polarity; $V$ matches $B$'s polarity).
 
 ### 5. Analog-to-Digital Modulation (PCM & DM)
-File: [`modulation.py`](file:///Users/hemendrakumar/Desktop/data_come/Data_Com_Assignment/modulation.py)
+File: [`modulation.py`](modulation.py)
 - **Analog Signal Generator**: Emulates continuous sinusoidal signal ($f = 2\text{ Hz}$) with high-density time sampling.
 - **Pulse Code Modulation (PCM)**:
   - Quantizes analog dynamic range into $L = 2^n$ uniform bins (default: $n = 3$, $L = 8$ levels).
@@ -108,7 +108,7 @@ File: [`modulation.py`](file:///Users/hemendrakumar/Desktop/data_come/Data_Com_A
 - **Pipeline Integration**: The modulated digital bitstream feeds directly into Line Coding encoders as specified in the assignment PDF.
 
 ### 6. Extra Credit: Waveform & Image-Pixel Decoders
-File: [`decoder.py`](file:///Users/hemendrakumar/Desktop/data_come/Data_Com_Assignment/decoder.py)
+File: [`decoder.py`](decoder.py)
 - **Physical Parameter Decoding**: Reconstructs bitstream strictly from $(t, v)$ voltage samples and boundary derivatives without reading raw bit memory.
 - **Direct Image-Pixel Analysis Decoding (`decode_from_image`)**:
   - Directly fulfills the PDF guideline: *"decode the signal by analysing the encoded signal parameters (i.e., image) and not the direct data values."*
@@ -120,7 +120,7 @@ File: [`decoder.py`](file:///Users/hemendrakumar/Desktop/data_come/Data_Com_Assi
   - Automatically detects violation pulses ($V$) and balancing pulses ($B$) to reverse substitution patterns back to original `'0'` runs.
 
 ### 7. Extra Credit: Desktop GUI Visualizer
-File: [`gui.py`](file:///Users/hemendrakumar/Desktop/data_come/Data_Com_Assignment/gui.py)
+File: [`gui.py`](gui.py)
 - Native desktop application implemented in **Tkinter + Matplotlib**.
 - Tab 1: **Digital Line Coding Visualizer** with live bitstream generation, palindrome inspection, zero-run viewer, radiobutton scheme selectors, waveform plotting, and one-click decode verification.
 - Tab 2: **Analog Modulation Visualizer** with sine wave generation, PCM quantization level sliders, DM step size controls, and staircase reconstruction.
@@ -168,12 +168,12 @@ pip install -r requirements.txt
 
 ---
 
-## 💻 Execution Guide
+## 💻 Execution & Testing Guide
 
 ### 1. Interactive CLI Pipeline (Assignment Prompt Flow)
 Executes the exact sequence of queries specified in Page 1 of the assignment PDF:
 ```bash
-python main.py
+python3 main.py
 ```
 **Interactive Sequence:**
 1. Choose **Digital Input** or **Analog Input (PCM/DM)**.
@@ -186,33 +186,49 @@ python main.py
 8. System performs **both physical parameter decoding and direct PNG image-pixel decoding**, showing verification status.
 
 ### 2. Desktop Graphical User Interface (GUI)
+To launch the interactive visualizer application:
 ```bash
-python main.py --gui
-# or directly:
-python gui.py
+python3 gui.py
+# or via main launcher:
+python3 main.py --gui
 ```
 
 ### 3. Automated Verification Test Suite
-Executes the automated test suite across all modules:
+Executes the comprehensive automated test suite across all 7 assignment components:
 ```bash
-python test_suite.py
+python3 test_suite.py
 ```
 
 ### 4. Standalone Module Verification Checks
+Each module can also be tested independently with its self-contained verification block:
 ```bash
-python data_generator.py
-python palindrome.py
-python line_coding.py
-python scrambling.py
-python modulation.py
-python decoder.py
+# Test bitstream generator & zero-run injection
+python3 data_generator.py
+
+# Test O(N) Manacher's palindrome detection algorithm
+python3 palindrome.py
+
+# Test line coding encoders (NRZ-L, NRZ-I, Manchester, Diff Manchester, AMI)
+python3 line_coding.py
+
+# Test AMI scramblers (B8ZS & HDB3) with O(N) zero-run detection
+python3 scrambling.py
+
+# Test analog PCM quantization & Delta Modulation (DM)
+python3 modulation.py
+
+# Test physical waveform parameter & PNG image-pixel decoders
+python3 decoder.py
+
+# Test waveform plotting utilities
+python3 plotter.py
 ```
 
 ---
 
 ## 🧪 Complete Automated Test Results
 
-The test suite [`test_suite.py`](file:///Users/hemendrakumar/Desktop/data_come/Data_Com_Assignment/test_suite.py) was executed to validate every component described in the assignment specification.
+The test suite [`test_suite.py`](test_suite.py) was executed to validate every component described in the assignment specification.
 
 ### Summary Table
 
@@ -322,7 +338,7 @@ Project satisfies all requirements of ITT 036 Programming Assignment 1.
 
 As specified in Page 2 of the assignment:
 - [x] Complete Python source code adhering to assignment constraints (no MATLAB/Octave).
-- [x] [`SPECIFICATION_REPORT.md`](file:///Users/hemendrakumar/Desktop/data_come/Data_Com_Assignment/SPECIFICATION_REPORT.md): 1-Page specification report covering languages, libraries, assumptions, execution guide, and academic references.
+- [x] [`SPECIFICATION_REPORT.md`](SPECIFICATION_REPORT.md): 1-Page specification report covering languages, libraries, assumptions, execution guide, and academic references.
 - [x] All competitive coding components implemented in optimal linear time $O(N)$ without nested `if/else` ladders.
 - [x] Extra credit component: Signal decoding from waveform parameters and saved plot images.
 - [x] Extra credit component: Interactive desktop graphical user interface (`gui.py`).
