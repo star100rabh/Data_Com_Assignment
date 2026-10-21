@@ -29,8 +29,7 @@
 4. [Installation & Setup](#-installation--setup)
 5. [Execution Guide](#-execution-guide)
 6. [🧪 Complete Automated Test Results](#-complete-automated-test-results)
-7. [Gradescope Submission Checklist](#-gradescope-submission-checklist)
-8. [References](#-references)
+7. [References](#-references)
 
 ---
 
@@ -259,16 +258,6 @@ The test suite [`test_suite.py`](test_suite.py) was executed to validate every c
 
 ---
 
-## 📋 Gradescope Submission Checklist
-
-As specified in Page 2 of the assignment:
-- [x] Complete Python source code adhering to assignment constraints (no MATLAB/Octave).
-- [x] All competitive coding components implemented in optimal linear time $O(N)$ without nested `if/else` ladders.
-- [x] Extra credit component: Signal decoding from waveform parameters and saved plot images.
-- [x] Extra credit component: Interactive desktop graphical user interface (`gui.py`).
-- [x] Automated test suite verifying 100% of pipeline requirements.
-
----
 
 ## 📚 References
 1. B. A. Forouzan, *Data Communications and Networking*, 5th ed., McGraw-Hill, 2012 (Chapter 4: Digital Transmission, Chapter 5: Analog Transmission).
