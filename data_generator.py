@@ -97,6 +97,8 @@ def format_bitstream(bits: str, group_size: int = 4) -> str:
     return " ".join(chunks)
 
 
+# ^^^^^^^^ Test ke liye likha hai maine (START) ^^^^^^^^
+# (Yeh section sirf is file ko akele chala kar check karne ke liye hai, main project logic upar hai)
 if __name__ == "__main__":
     print("--- Bitstream Generation Check ---")
 
@@ -121,4 +123,4 @@ if __name__ == "__main__":
     stream, pal = generate_and_find_palindrome(length=24, run_type="4_zeros")
     print("\nGenerated stream     :", stream)
     print("Longest Palindrome   :", pal["palindrome"], f"(Length: {pal['length']}, Start: {pal['start_index']})")
-
+# ^^^^^^^^ Test ke liye likha hai maine (END) ^^^^^^^^

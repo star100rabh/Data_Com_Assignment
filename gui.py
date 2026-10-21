@@ -419,6 +419,8 @@ def launch_gui_window():
     app.mainloop()
 
 
+# ^^^^^^^^ Test ke liye likha hai maine (START) ^^^^^^^^
+# (Yeh section sirf is file ko akele chala kar check karne ke liye hai, main project logic upar hai)
 if __name__ == "__main__":
     launch_gui_window()
-
+# ^^^^^^^^ Test ke liye likha hai maine (END) ^^^^^^^^

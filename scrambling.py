@@ -170,6 +170,8 @@ def scramble_signal(bitstream: str, scheme: str = "B8ZS"):
         raise ValueError(f"Unknown scrambling scheme: {scheme}. Choose 'B8ZS' or 'HDB3'.")
 
 
+# ^^^^^^^^ Test ke liye likha hai maine (START) ^^^^^^^^
+# (Yeh section sirf is file ko akele chala kar check karne ke liye hai, main project logic upar hai)
 if __name__ == "__main__":
     from data_generator import generate_bits_with_zero_runs
     from plotter import plot_line_code
@@ -205,4 +207,4 @@ if __name__ == "__main__":
                    labels=hdb3_syms, save_path="hdb3_test.png")
 
     print("\nScrambling tests completed successfully.")
-
+# ^^^^^^^^ Test ke liye likha hai maine (END) ^^^^^^^^

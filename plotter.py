@@ -115,6 +115,8 @@ def plot_analog_and_staircase(t_analog: np.ndarray, signal_analog: np.ndarray,
     plt.close(fig)
 
 
+# ^^^^^^^^ Test ke liye likha hai maine (START) ^^^^^^^^
+# (Yeh section sirf is file ko akele chala kar check karne ke liye hai, main project logic upar hai)
 if __name__ == "__main__":
     print("--- Waveform Plotter Self-Check ---")
     
@@ -126,4 +128,4 @@ if __name__ == "__main__":
     
     plot_line_code(test_bits, t, v, "Test Rectangular Wave", save_path="test_plot.png")
     print("Self-check completed: test_plot.png generated successfully.")
-
+# ^^^^^^^^ Test ke liye likha hai maine (END) ^^^^^^^^
