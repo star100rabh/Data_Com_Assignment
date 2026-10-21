@@ -146,8 +146,6 @@ def encode_signal(bitstream: str, scheme: str):
         raise ValueError(f"Unknown line coding scheme: {scheme}")
 
 
-# ^^^^^^^^ Test ke liye likha hai maine (START) ^^^^^^^^
-# (Yeh section sirf is file ko akele chala kar check karne ke liye hai, main project logic upar hai)
 if __name__ == "__main__":
     from plotter import plot_line_code
 
@@ -170,4 +168,4 @@ if __name__ == "__main__":
         plot_line_code(test_stream, t, v, name, save_path=f"{name.lower().replace(' ', '_')}_test.png")
 
     print("\nAll 5 line coding checks completed successfully.")
-# ^^^^^^^^ Test ke liye likha hai maine (END) ^^^^^^^^
+

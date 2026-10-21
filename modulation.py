@@ -139,8 +139,6 @@ def dm_decode(bitstream: str, step_size: float = 0.2, initial_val: float = 0.0):
     return np.array(staircase)
 
 
-# ^^^^^^^^ Test ke liye likha hai maine (START) ^^^^^^^^
-# (Yeh section sirf is file ko akele chala kar check karne ke liye hai, main project logic upar hai)
 if __name__ == "__main__":
     from plotter import plot_analog_and_staircase, plot_line_code
     from line_coding import encode_signal
@@ -182,4 +180,4 @@ if __name__ == "__main__":
     plot_line_code(pcm_bits[:12], t_line, v_line, "NRZ-L (From PCM Bitstream)", save_path="pcm_line_code_test.png")
 
     print("\nAll PCM & DM tests passed successfully!")
-# ^^^^^^^^ Test ke liye likha hai maine (END) ^^^^^^^^
+

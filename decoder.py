@@ -393,8 +393,6 @@ def decode_signal(time_or_image, voltage: np.ndarray = None, scheme: str = "NRZ-
         raise ValueError(f"Unknown decoding scheme: {scheme}")
 
 
-# ^^^^^^^^ Test ke liye likha hai maine (START) ^^^^^^^^
-# (Yeh section sirf is file ko akele chala kar check karne ke liye hai, main project logic upar hai)
 if __name__ == "__main__":
     from line_coding import encode_signal
     from scrambling import scramble_b8zs, scramble_hdb3
@@ -461,4 +459,4 @@ if __name__ == "__main__":
         print("All line coding decoders, descramblers, and image decoders verified successfully!")
     else:
         print("Some decoders had mismatches. Please check.")
-# ^^^^^^^^ Test ke liye likha hai maine (END) ^^^^^^^^
+
